@@ -1,2 +1,2 @@
 # ThisNetWorks.OrchardCore.Themes
-Custom themes for Orchard Core
+Some sample and experimental Custom themes for Orchard Core
