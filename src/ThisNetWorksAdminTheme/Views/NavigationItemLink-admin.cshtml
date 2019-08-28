@@ -1,0 +1,67 @@
+@{
+    // Morphing the shape to keep Model untouched
+    Model.Metadata.Alternates.Clear();
+    Model.Metadata.Type = "NavigationItemText";
+    Model.Metadata.Alternates.Add("NavigationItemText_Id__" + Model.Id);
+
+    TagBuilder linkTag;
+    TagBuilder chevronTag = null;
+    TagBuilder labelTag = new TagBuilder("label");
+
+    var level = (int)Model.Level;
+    int paddingLeft = 15 * level;
+    if (!Model.HasItems)
+    {
+        paddingLeft += 20;
+
+    }
+
+
+    if (Model.HasItems)
+    {
+        chevronTag = new TagBuilder("span");
+        chevronTag.Attributes["data-target"] = "#menu-item-" + Model.GetHashCode().ToString();
+        chevronTag.Attributes["data-toggle"] = "collapse";
+        chevronTag.Attributes["aria-controls"] = Model.GetHashCode().ToString();
+
+        if ((bool)Model.Selected)
+        {
+            chevronTag.Attributes["aria-expanded"] = "true";
+        }
+        else
+        {
+            chevronTag.Attributes["aria-expanded"] = "false";
+        }
+        chevronTag.TagRenderMode = TagRenderMode.Normal;
+        chevronTag.InnerHtml.AppendHtml(Html.Raw("<i class=\"fas fa-chevron-right chevron\"></i>"));
+
+        // Label
+        linkTag = new TagBuilder("a");
+        linkTag.Attributes["href"] = Model.Href ?? "#";
+        linkTag.TagRenderMode = TagRenderMode.Normal;
+        linkTag.InnerHtml.AppendHtml(await DisplayAsync(Model));
+
+    }
+    else
+    {
+        linkTag = Tag(Model, "a");
+        linkTag.Attributes["href"] = Model.Href ?? "#";
+        linkTag.InnerHtml.AppendHtml(await DisplayAsync(Model));
+    }
+
+}
+
+@labelTag.RenderStartTag()
+@if (chevronTag != null)
+{
+    @chevronTag
+    paddingLeft += 10;
+    chevronTag.Attributes.Add("style", "padding-left: " + paddingLeft.ToString() + "px");
+}
+else
+{
+    linkTag.Attributes.Add("style", "padding-left: " + paddingLeft.ToString() + "px");
+}
+@linkTag
+@labelTag.RenderEndTag()
+

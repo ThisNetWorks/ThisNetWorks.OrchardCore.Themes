@@ -1,0 +1,109 @@
+@*@{
+        TagBuilder tag = Tag(Model, "li");
+
+        // Morphing the shape to keep Model untouched
+        Model.Metadata.Alternates.Clear();
+        Model.Metadata.Type = "NavigationItemLink";
+        Model.Metadata.Alternates.Add("NavigationItemLink_Id__" + Model.Id);
+
+        if ((bool)Model.Selected)
+        {
+            tag.AddCssClass("active");
+        }
+
+        // Render sub-items (MenuItem)
+        if (Model.HasItems)
+        {
+            tag.AddCssClass("has-items");
+            tag.InnerHtml.AppendHtml(await DisplayAsync(Model));
+
+            if ((bool)Model.Selected)
+            {
+                tag.InnerHtml.AppendHtml("<ul id=\"m" + Model.GetHashCode() + "\" class=\"collapse show\" >");
+            }
+            else
+            {
+                tag.InnerHtml.AppendHtml("<ul id=\"m" + Model.GetHashCode() + "\" class=\"collapse\" >");
+            }
+
+            foreach (var item in Model)
+            {
+                tag.InnerHtml.AppendHtml(await DisplayAsync(item));
+            }
+            tag.InnerHtml.AppendHtml("</ul>");
+        }
+        else
+        {
+            tag.InnerHtml.AppendHtml(await DisplayAsync(Model));
+        }
+    }
+
+    @tag*@
+
+@using System.Linq;
+
+@{
+    TagBuilder tag = Tag(Model, "li");
+
+    // Morphing the shape to keep Model untouched
+    Model.Metadata.Alternates.Clear();
+    Model.Metadata.Type = "NavigationItemLink";
+    Model.Metadata.Alternates.Add("NavigationItemLink_Id__" + Model.Id);
+
+    bool selected = Model.Selected;
+    if (selected)
+    {
+        tag.AddCssClass("active");
+    }
+
+    // Render sub-items (MenuItem)
+    if (Model.HasItems)
+    {
+        tag.InnerHtml.AppendHtml(await DisplayAsync(Model));
+
+        var ulTag = new TagBuilder("ul");
+        ulTag.GenerateId("menu-item-" + Model.GetHashCode(), "-");
+        ulTag.AddCssClass("collapse");
+        if ((bool)Model.Selected)
+        {
+            ulTag.AddCssClass("show");
+        }
+        tag.InnerHtml.AppendHtml(ulTag.RenderStartTag());
+        int i = 0;
+        foreach (var item in Model)
+        {
+            tag.InnerHtml.AppendHtml(await DisplayAsync(item));
+            bool subItemSelected = item.Selected;
+            bool hasSubItems = item.HasItems;
+            if (subItemSelected & !hasSubItems)
+            {
+                var items = (List<OrchardCore.DisplayManagement.IPositioned>)Model.Items;
+                var nextItem = (dynamic)items.ElementAtOrDefault(i + 1);
+                if (nextItem != null)
+                {
+                    //we  build a next shape here
+                    <zone name="Content" position="20">
+                        @{ <div class="d-flex justify-content-center">
+                                <div>
+                                    <hr />
+                                    <h5 class="text-center up-next"><a href="@nextItem.Href">Next up - @nextItem.Text</a></h5>
+                                </div>
+                            </div>
+                        }
+                    </zone>
+                }
+            }
+            i++;
+        }
+        tag.InnerHtml.AppendHtml(ulTag.RenderEndTag());
+    }
+    else
+    {
+        tag.InnerHtml.AppendHtml(await DisplayAsync(Model));
+    }
+}
+
+@tag
+
+
+
