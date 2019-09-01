@@ -4,18 +4,17 @@
     Model.Metadata.Type = "NavigationItemText";
     Model.Metadata.Alternates.Add("NavigationItemText_Id__" + Model.Id);
 
-    TagBuilder linkTag;
+    TagBuilder linkTag = null;
     TagBuilder chevronTag = null;
     TagBuilder labelTag = new TagBuilder("label");
+    labelTag.AddCssClass("item-label");
 
     var level = (int)Model.Level;
-    int paddingLeft = 15 * level;
-    if (!Model.HasItems)
+    int paddingLeft = 0;
+    if (level > 2)
     {
-        paddingLeft += 20;
-
+        paddingLeft = 15 * (level -2);
     }
-
 
     if (Model.HasItems)
     {
@@ -36,17 +35,29 @@
         chevronTag.InnerHtml.AppendHtml(Html.Raw("<i class=\"fas fa-chevron-right chevron\"></i>"));
 
         // Label
-        linkTag = new TagBuilder("a");
-        linkTag.Attributes["href"] = Model.Href ?? "#";
-        linkTag.TagRenderMode = TagRenderMode.Normal;
-        linkTag.InnerHtml.AppendHtml(await DisplayAsync(Model));
-
+        if (String.IsNullOrEmpty(Model.Href) || Model.Href == "#")
+        {
+            linkTag = Tag(Model, "span");
+            linkTag.AddCssClass("item-label");
+            linkTag.InnerHtml.AppendHtml(await DisplayAsync(Model));
+        }
+        else
+        {
+            linkTag = new TagBuilder("a");
+            linkTag.AddCssClass("item-label");
+            linkTag.Attributes["href"] = Model.Href ?? "#";
+            linkTag.Attributes.Add("style","width:90%;");
+            linkTag.TagRenderMode = TagRenderMode.Normal;
+            linkTag.InnerHtml.AppendHtml(await DisplayAsync(Model));
+        }
     }
     else
     {
         linkTag = Tag(Model, "a");
+        linkTag.AddCssClass("item-label w-100");
         linkTag.Attributes["href"] = Model.Href ?? "#";
         linkTag.InnerHtml.AppendHtml(await DisplayAsync(Model));
+        labelTag.AddCssClass("last");
     }
 
 }
@@ -55,13 +66,18 @@
 @if (chevronTag != null)
 {
     @chevronTag
-    paddingLeft += 10;
-    chevronTag.Attributes.Add("style", "padding-left: " + paddingLeft.ToString() + "px");
 }
-else
+@if (linkTag != null)
 {
-    linkTag.Attributes.Add("style", "padding-left: " + paddingLeft.ToString() + "px");
+    if (linkTag.Attributes.Keys.Contains("style"))
+    {
+        linkTag.Attributes["style"] = linkTag.Attributes["style"] + " padding-left: " + paddingLeft.ToString() + "px !important";
+    } else
+    {
+        
+        linkTag.Attributes.Add("style", "padding-left: " + paddingLeft.ToString() + "px !important");
+    }
+    @linkTag
 }
-@linkTag
 @labelTag.RenderEndTag()
 
