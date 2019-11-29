@@ -1,5 +1,3 @@
-@using System.Linq;
-
 @{
     TagBuilder tag = Tag(Model, "li");
 
@@ -17,7 +15,6 @@
     // Render sub-items (MenuItem)
     if (Model.HasItems)
     {
-        tag.AddCssClass("has-items");
         tag.InnerHtml.AppendHtml(await DisplayAsync(Model));
 
         var ulTag = new TagBuilder("ul");

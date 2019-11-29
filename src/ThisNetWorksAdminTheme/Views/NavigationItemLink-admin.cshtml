@@ -7,14 +7,14 @@
     TagBuilder linkTag = null;
     TagBuilder chevronTag = null;
     TagBuilder labelTag = new TagBuilder("label");
-    labelTag.AddCssClass("item-label");
+    labelTag.AddCssClass("menu-label d-flex");
 
-    var level = (int)Model.Level;
-    int paddingLeft = 0;
-    if (level > 2)
-    {
-        paddingLeft = 15 * (level -2);
-    }
+    //var level = (int)Model.Level;
+    //int paddingLeft = 0;
+    //if (level > 2)
+    //{
+    //    paddingLeft = 15 * (level -2);
+    //}
 
     if (Model.HasItems)
     {
@@ -22,6 +22,7 @@
         chevronTag.Attributes["data-target"] = "#menu-item-" + Model.GetHashCode().ToString();
         chevronTag.Attributes["data-toggle"] = "collapse";
         chevronTag.Attributes["aria-controls"] = Model.GetHashCode().ToString();
+        chevronTag.AddCssClass("my-chevron");
 
         if ((bool)Model.Selected)
         {
@@ -32,21 +33,23 @@
             chevronTag.Attributes["aria-expanded"] = "false";
         }
         chevronTag.TagRenderMode = TagRenderMode.Normal;
-        chevronTag.InnerHtml.AppendHtml(Html.Raw("<i class=\"fas fa-chevron-right chevron\"></i>"));
+        chevronTag.InnerHtml.AppendHtml(Html.Raw("<i class=\"fas fa-chevron-right\"></i>"));
 
         // Label
         if (String.IsNullOrEmpty(Model.Href) || Model.Href == "#")
         {
-            linkTag = Tag(Model, "span");
-            linkTag.AddCssClass("item-label");
+            linkTag = Tag(Model, "span"); 
+            linkTag.Attributes["data-target"] = "#menu-item-" + Model.GetHashCode().ToString();
+            linkTag.Attributes["data-toggle"] = "collapse";
+            linkTag.Attributes["aria-controls"] = Model.GetHashCode().ToString();
             linkTag.InnerHtml.AppendHtml(await DisplayAsync(Model));
         }
         else
         {
             linkTag = new TagBuilder("a");
-            linkTag.AddCssClass("item-label");
+            linkTag.AddCssClass("skinny");
+            //linkTag.AddCssClass("item-label");
             linkTag.Attributes["href"] = Model.Href ?? "#";
-            linkTag.Attributes.Add("style","width:90%;");
             linkTag.TagRenderMode = TagRenderMode.Normal;
             linkTag.InnerHtml.AppendHtml(await DisplayAsync(Model));
         }
@@ -54,30 +57,22 @@
     else
     {
         linkTag = Tag(Model, "a");
-        linkTag.AddCssClass("item-label w-100");
         linkTag.Attributes["href"] = Model.Href ?? "#";
         linkTag.InnerHtml.AppendHtml(await DisplayAsync(Model));
         labelTag.AddCssClass("last");
     }
-
+    linkTag.AddCssClass("w-100");
 }
 
 @labelTag.RenderStartTag()
+
+@if (linkTag != null)
+{
+    @linkTag
+}
 @if (chevronTag != null)
 {
     @chevronTag
-}
-@if (linkTag != null)
-{
-    if (linkTag.Attributes.Keys.Contains("style"))
-    {
-        linkTag.Attributes["style"] = linkTag.Attributes["style"] + " padding-left: " + paddingLeft.ToString() + "px !important";
-    } else
-    {
-        
-        linkTag.Attributes.Add("style", "padding-left: " + paddingLeft.ToString() + "px !important");
-    }
-    @linkTag
 }
 @labelTag.RenderEndTag()
 
