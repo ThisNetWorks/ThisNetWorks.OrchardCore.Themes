@@ -1,0 +1,28 @@
+$white: #000;
+
+$dark-grey: #495057;
+$light-hover: rgba(0, 0, 0, 0.1);
+$light-grey: rgba(0, 0, 0, 0.1);
+
+$left-navigation-width: 300px;
+
+.ta-content {
+  margin-left: $left-navigation-width !important;
+}
+
+body:not(.left-sidebar-compact) {
+  #ta-left-sidebar {
+    width: $left-navigation-width;
+    #left-nav {
+      > ul {
+        > li {
+          line-height: 3em;
+          width: $left-navigation-width;
+        }
+      }
+      > li > ul {
+        width: $left-navigation-width;
+      }
+    }
+  }
+}

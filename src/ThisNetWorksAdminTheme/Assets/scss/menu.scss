@@ -1,0 +1,86 @@
+.menu-docmenu {
+  list-style: none;
+  padding-left: 0px;
+  font-size: 1rem;
+  .active {
+    > label {
+      background-color: $light-grey;
+      span {
+        color: $white;
+      }
+      a {
+        color: $white;
+      }
+    }
+  }
+
+  ul {
+    padding-left: 0px;
+    -webkit-padding-start: 0px;
+  }
+  li {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    list-style: none;
+
+    label {
+      margin-bottom: 0px;
+      width: 100%;
+      display: flex;
+    }
+    label:hover {
+      background-color: $light-hover;
+      color: $light-hover;
+    }
+
+    span {
+      padding-left: 10px;
+      padding-right: 10px;
+      cursor: pointer;
+      color: $dark-grey;
+    }
+    span[aria-expanded="true"] {
+      .chevron {
+        transform: rotate(90deg);
+        transition-duration: 0.2s;
+      }
+    }
+
+    span[aria-expanded="false"] {
+      .chevron {
+        transition-duration: 0.2s;
+      }
+    }
+    a {
+      display: flex;
+      flex: 1;
+      padding-left: 10px !important;
+      padding-right: 10px !important;
+      font-weight: 400;
+      letter-spacing: 1px;
+    }
+    a .title {
+      margin-left: -6px;
+    }
+
+    svg {
+      font-size: 12px;
+      margin-bottom: 2px;
+      margin-top: 13px;
+    }
+  }
+}
+
+.active-last {
+  & > label {
+    background-color: $dark-grey !important;
+  }
+}
+
+.skinny .title {
+  margin-left: -6px;
+}
+
+.skinny {
+  margin-left: -6px;
+}

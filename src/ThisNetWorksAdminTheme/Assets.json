@@ -1,0 +1,11 @@
+[
+  {
+    "generateSourceMaps": true,
+    "inputs": [
+      "Assets/scss/theme-harvester.scss"
+    ],
+
+    "watch": [ "Assets/scss/**/*.scss" ],
+    "output": "wwwroot/Styles/theme.css"
+  }
+]

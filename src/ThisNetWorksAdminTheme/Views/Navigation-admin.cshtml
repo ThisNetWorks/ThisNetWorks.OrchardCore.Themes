@@ -1,0 +1,32 @@
+@using System.Linq
+@{
+    IList<string> classes = Model.Classes;
+    var c = classes.FirstOrDefault(x => x == "menu-admin");
+    Model.Classes.Remove(c);
+
+    TagBuilder tag = Tag(Model, "ul");
+
+    tag.AddCssClass("menu-docmenu");
+
+    foreach (var item in Model)
+    {
+        tag.InnerHtml.AppendHtml(await DisplayAsync(item));
+    }
+}
+
+<nav id="left-nav">
+    @tag
+</nav>
+<!-- Menu rendered on @DateTime.UtcNow.ToString("r") -->
+<script at="Foot">
+    $('.menu-docmenu').find('.active').last().addClass('active-last');
+
+    // quick hack to fix margin issues
+    $('.menu-docment, .menu-label').each(function (item) {
+        var spans = $(this).children('span');
+        var noIcons = $(spans).find('span.icon-none');
+        if (noIcons.length > 0) {
+            $(noIcons).siblings().addClass('skinny');
+        }
+    });
+</script>

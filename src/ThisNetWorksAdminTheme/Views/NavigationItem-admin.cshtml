@@ -1,0 +1,43 @@
+@{
+    TagBuilder tag = Tag(Model, "li");
+
+    // Morphing the shape to keep Model untouched
+    Model.Metadata.Alternates.Clear();
+    Model.Metadata.Type = "NavigationItemLink";
+    Model.Metadata.Alternates.Add("NavigationItemLink_Id__" + Model.Id);
+
+    bool selected = Model.Selected;
+    if (selected)
+    {
+        tag.AddCssClass("active");
+    }
+
+    // Render sub-items (MenuItem)
+    if (Model.HasItems)
+    {
+        tag.InnerHtml.AppendHtml(await DisplayAsync(Model));
+
+        var ulTag = new TagBuilder("ul");
+        ulTag.GenerateId("menu-item-" + Model.GetHashCode(), "-");
+        ulTag.AddCssClass("collapse");
+        if ((bool)Model.Selected)
+        {
+            ulTag.AddCssClass("show");
+        }
+        tag.InnerHtml.AppendHtml(ulTag.RenderStartTag());
+        foreach (var item in Model)
+        {
+            tag.InnerHtml.AppendHtml(await DisplayAsync(item));
+        }
+        tag.InnerHtml.AppendHtml(ulTag.RenderEndTag());
+    }
+    else
+    {
+        tag.InnerHtml.AppendHtml(await DisplayAsync(Model));
+    }
+}
+
+@tag
+
+
+
