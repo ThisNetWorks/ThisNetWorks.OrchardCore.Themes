@@ -1,10 +1,28 @@
-$blue-grey-lighten-3: #4287f5;
-$blue-grey-lighten-4: #79a6ed;
-$blue-grey-darken-3: #025be8;
-$blue-grey-base: #4a6796;
-
 $white: #000;
 
 $dark-grey: #495057;
 $light-hover: rgba(0, 0, 0, 0.1);
 $light-grey: rgba(0, 0, 0, 0.1);
+
+$left-navigation-width: 300px;
+
+.ta-content {
+  margin-left: $left-navigation-width !important;
+}
+
+body:not(.left-sidebar-compact) {
+  #ta-left-sidebar {
+    width: $left-navigation-width;
+    #left-nav {
+      > ul {
+        > li {
+          line-height: 3em;
+          width: $left-navigation-width;
+        }
+      }
+      > li > ul {
+        width: $left-navigation-width;
+      }
+    }
+  }
+}

@@ -10,22 +10,8 @@
     <!-- Custom admin theme -->
     <!-- Bootstrap CSS -->
     <style asp-name="admin" asp-src="~/TheAdmin/Styles/TheAdmin.min.css" debug-src="~/TheAdmin/Styles/TheAdmin.css" depends-on="jQuery-ui"></style>
-    <style asp-name="thisnetworksadmintheme" asp-src="~/ThisNetworksAdminTheme/Styles/theme.min.css" debug-src="~/ThisNetworksAdminTheme/Styles/theme.css"></style>
+    <style asp-name="thisnetworksadmintheme" asp-src="~/ThisNetWorksAdminTheme/Styles/theme.min.css" debug-src="~/ThisNetWorksAdminTheme/Styles/theme.css"></style>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-    <style>
-        @* Very simple adaption to styling to remove so many shades of grey from default admin.*@
-        .item-label {
-            background-color: #eaeaea !important;
-        }
-
-        .item-label:hover {
-            background-color: #eaeaea !important;
-        }
-        .active>.last .item-label{
-            background-color: #eaeaea !important;
-        }
-    </style>
 
     <script asp-name="font-awesome" at="Foot" version="5"></script>
     <script asp-name="font-awesome-v4-shims" at="Foot" version="5"></script>
@@ -65,6 +51,7 @@
 
         <div class="ta-content">
             @await RenderSectionAsync("Messages", required: false)
+            @await RenderSectionAsync("Breadcrumbs", required: false)
 
             @await RenderBodyAsync()
         </div>
@@ -72,7 +59,7 @@
 
     @await RenderSectionAsync("Footer", required: false)
 
-    <div id="confirmRemoveModalMetadata" data-title="@T["Delete"]" data-message="@T["Are you sure you want to remove this element?"]" data-ok="@T["Ok"]" data-cancel="@T["Cancel"]"></div>
+    <div id="confirmRemoveModalMetadata" data-title="@T["Delete"]" data-message="@T["Are you sure you want to remove this element?"]" data-ok-text="@T["Ok"]" data-cancel-text="@T["Cancel"]" data-ok-class="btn-danger" data-cancel-class="btn-secondary"></div>
 
     <resources type="Footer" />
 </body>

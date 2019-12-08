@@ -9,12 +9,11 @@
     TagBuilder labelTag = new TagBuilder("label");
     labelTag.AddCssClass("menu-label d-flex");
 
-    //var level = (int)Model.Level;
-    //int paddingLeft = 0;
-    //if (level > 2)
-    //{
-    //    paddingLeft = 15 * (level -2);
-    //}
+    var level = (int)Model.Level;
+
+    var paddingLeft = 16 * level - 16;
+
+    labelTag.Attributes.Add("style", "padding-left: " + paddingLeft.ToString() + "px");
 
     if (Model.HasItems)
     {
@@ -22,7 +21,6 @@
         chevronTag.Attributes["data-target"] = "#menu-item-" + Model.GetHashCode().ToString();
         chevronTag.Attributes["data-toggle"] = "collapse";
         chevronTag.Attributes["aria-controls"] = Model.GetHashCode().ToString();
-        chevronTag.AddCssClass("my-chevron");
 
         if ((bool)Model.Selected)
         {
@@ -38,7 +36,7 @@
         // Label
         if (String.IsNullOrEmpty(Model.Href) || Model.Href == "#")
         {
-            linkTag = Tag(Model, "span"); 
+            linkTag = Tag(Model, "span");
             linkTag.Attributes["data-target"] = "#menu-item-" + Model.GetHashCode().ToString();
             linkTag.Attributes["data-toggle"] = "collapse";
             linkTag.Attributes["aria-controls"] = Model.GetHashCode().ToString();
@@ -66,8 +64,10 @@
 
 @labelTag.RenderStartTag()
 
+
 @if (linkTag != null)
 {
+
     @linkTag
 }
 @if (chevronTag != null)
